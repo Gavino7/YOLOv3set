@@ -1,0 +1,36 @@
+# git clone https://github.com/david8862/keras-YOLOv3-model-set.git
+# small code changes
+
+# import del progetto PyCharm e installazione moduli
+pip install -r requirements.txt
+
+# dataset json generator 
+cd .\dataset_generator_babylon\
+START /B start.bat
+
+# JSON to JPG and annotations
+python json_to_dataset.py 
+
+# Train 1st step ~20 epoch
+python train.py --data_shuffle --optimizer rmsprop --model_type yolo3_darknet --weights_path ./weights/darknet53.h5 --freeze_level 1 --annotation_file ./data/annotation.train  --val_annotation_file ./data/annotation.val --classes_path ./data/class_map  --batch_size 16 --eval_online --eval_epoch_interval 1  --save_eval_checkpoint
+
+# Train 2nd step
+python train.py --init_epoch X --data_shuffle --optimizer rmsprop --model_type yolo3_darknet --weights_path ./logs/000/xxx.h5 --freeze_level 2 --annotation_file ./data/annotation.train  --val_annotation_file ./data/annotation.val --classes_path ./data/class_map  --batch_size 16 --eval_online --eval_epoch_interval 1  --save_eval_checkpoint
+
+# Evaluation (not working)
+python eval.py --model_path=./logs/000/ep002-loss12.012-val_loss13.169.h5 --anchors_path=./configs/yolo3_anchors.txt --classes_path=./data/class_map --model_image_size=416x416 --eval_type=VOC --iou_threshold=0.5 --conf_threshold=0.001 --annotation_file=./data/annotation.test --save_result
+
+# Test w/ best model
+python yolo.py --model_type yolo3_darknet --weights_path=./logs/000/ep015-loss5.527-val_loss5.691-mAP95.746.h5 --anchors_path=configs/yolo3_anchors.txt --classes_path=./data/class_map --model_image_size=416x416 --image
+
+# tensoboard
+tensorboard --logdir ./logs/000
+
+############## to be tested enhance & multiscale
+
+# Train 1st step ~20 epoch
+python train.py --enhance_augment mosaic --multiscale --data_shuffle --optimizer rmsprop --model_type yolo3_darknet --weights_path ./weights/darknet53.h5 --freeze_level 1 --annotation_file ./data/annotation.train  --val_annotation_file ./data/annotation.val --classes_path ./data/class_map  --batch_size 16 --eval_online --eval_epoch_interval 1  --save_eval_checkpoint
+
+# Train 2nd step
+python train.py --enhance_augment mosaic --multiscale --init_epoch X --data_shuffle --optimizer rmsprop --model_type yolo3_darknet --weights_path ./logs/000/xxx.h5 --freeze_level 2 --annotation_file ./data/annotation.train  --val_annotation_file ./data/annotation.val --classes_path ./data/class_map  --batch_size 16 --eval_online --eval_epoch_interval 1  --save_eval_checkpoint
+
