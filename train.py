@@ -7,7 +7,8 @@ import os, time, random, argparse
 import numpy as np
 import tensorflow.keras.backend as K
 from tensorflow.keras.utils import multi_gpu_model
-from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, LearningRateScheduler, EarlyStopping, TerminateOnNaN, Lambda
+from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, LearningRateScheduler, EarlyStopping, TerminateOnNaN, LambdaCallback
+from tensorflow.keras.layers import Lambda
 from tensorflow_model_optimization.sparsity import keras as sparsity
 
 from yolo3.model import get_yolo3_train_model
@@ -173,6 +174,8 @@ def main(args):
 
     # Wait 2 seconds for next stage
     time.sleep(2)
+
+
 
     if args.decay_type:
         # rebuild optimizer to apply learning rate decay, only after

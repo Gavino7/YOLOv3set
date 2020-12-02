@@ -251,7 +251,7 @@ def get_yolo3_train_model(model_type, anchors, num_classes, weights_path=None, f
             model_body.layers[i].trainable= True
         print('Unfreeze all of the layers.')
 
-    model_loss, location_loss, confidence_loss, class_loss = Lambda(yolo3_loss, name='yolo_loss',
+    model_loss, location_loss, confidence_loss, class_loss, loss = Lambda(yolo3_loss, name='yolo_loss',
             arguments={'anchors': anchors, 'num_classes': num_classes, 'ignore_thresh': 0.5, 'label_smoothing': label_smoothing, 'elim_grid_sense': elim_grid_sense})(
         [*model_body.output, *y_true])
 
