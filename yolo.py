@@ -277,16 +277,19 @@ def detect_video(yolo, video_path, output_path=""):
 
 
 def detect_img(yolo):
-    while True:
-        img = input('Input image filename:')
+    test_images = os.listdir("./test")
+    c = 0
+    for img in test_images:
         try:
-            image = Image.open(img)
+            image = Image.open(os.path.join("./test", img))
         except:
             print('Open Error! Try again!')
             continue
         else:
             r_image = yolo.detect_image(image)
-            r_image.show()
+            # r_image.save("DetectedImages/testImage" + str(c) + ".jpg")
+            r_image.save("DetectedImages/testImage" + str(c) + ".jpg")
+            c = c + 1
 
 
 if __name__ == '__main__':
