@@ -154,7 +154,7 @@ def main(args):
 
     # Transfer training some epochs with frozen layers first if needed, to get a stable loss.
     initial_epoch = args.init_epoch
-    epochs = initial_epoch + args.transfer_epoch
+    epochs = 25 #initial_epoch + args.transfer_epoch
     print("Transfer training stage")
     print('Train on {} samples, val on {} samples, with batch size {}, input_shape {}.'.format(num_train, num_val, args.batch_size, input_shape))
     #model.fit_generator(train_data_generator,
