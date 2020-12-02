@@ -8,7 +8,6 @@ import numpy as np
 import tensorflow.keras.backend as K
 from tensorflow.keras.utils import multi_gpu_model
 from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, LearningRateScheduler, EarlyStopping, TerminateOnNaN, LambdaCallback
-from tensorflow.keras.layers import Lambda
 from tensorflow_model_optimization.sparsity import keras as sparsity
 
 from yolo3.model import get_yolo3_train_model
@@ -48,7 +47,7 @@ def main(args):
         freeze_level = args.freeze_level
 
     # callbacks for training process
-    logging = TensorBoard(log_dir=log_dir, histogram_freq=0, write_graph=True, write_grads=False, write_images=True, update_freq='batch')
+    logging = TensorBoard(log_dir=log_dir, histogram_freq=0, write_graph=False, write_grads=False, write_images=False, update_freq='batch')
     checkpoint = ModelCheckpoint(os.path.join(log_dir, 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5'),
         monitor='val_loss',
         mode='min',
@@ -56,7 +55,7 @@ def main(args):
         save_weights_only=False,
         save_best_only=True,
         period=1)
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, mode='min', patience=5, verbose=1, cooldown=0, min_lr=1e-10000)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, mode='min', patience=10, verbose=1, cooldown=0, min_lr=1e-1000)
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=50, verbose=1, mode='min')
     terminate_on_nan = TerminateOnNaN()
 
@@ -155,7 +154,7 @@ def main(args):
 
     # Transfer training some epochs with frozen layers first if needed, to get a stable loss.
     initial_epoch = args.init_epoch
-    epochs = 25 #initial_epoch + args.transfer_epoch
+    epochs = 25
     print("Transfer training stage")
     print('Train on {} samples, val on {} samples, with batch size {}, input_shape {}.'.format(num_train, num_val, args.batch_size, input_shape))
     #model.fit_generator(train_data_generator,
@@ -174,8 +173,6 @@ def main(args):
 
     # Wait 2 seconds for next stage
     time.sleep(2)
-
-
 
     if args.decay_type:
         # rebuild optimizer to apply learning rate decay, only after
