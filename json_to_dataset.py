@@ -17,7 +17,7 @@ flags.DEFINE_string('anno_test', './data/annotation.test', 'Test annotation file
 flags.DEFINE_string('class_map', './data/class_map', 'Class map')
 flags.DEFINE_integer('random_seed', 1, 'Random seed used for dataset splitting', lower_bound=1)
 flags.DEFINE_integer('validation_holdout', 20, '% of initial dataset to save for validation purpose')
-flags.DEFINE_integer('test_holdout', 0, '% of initial dataset to save for test purpose')
+flags.DEFINE_integer('test_holdout', 10, '% of initial dataset to save for test purpose')
 
 def main(_argv):
 	# Load class map as a "class to index" dictionary
