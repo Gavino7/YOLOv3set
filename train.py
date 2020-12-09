@@ -255,7 +255,7 @@ if __name__ == '__main__':
         help = "Freeze level of the model in transfer training stage. 0:NA/1:backbone/2:only open prediction layer")
     parser.add_argument('--init_epoch', type=int,required=False, default=0,
         help = "Initial training epochs for fine tune training, default=%(default)s")
-    parser.add_argument('--total_epoch', type=int,required=False, default=40,
+    parser.add_argument('--total_epoch', type=int,required=False, default=50,
         help = "Total training epochs, default=%(default)s")
     parser.add_argument('--multiscale', default=False, action="store_true",
         help='Whether to use multiscale training')
