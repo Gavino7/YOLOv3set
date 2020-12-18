@@ -55,7 +55,7 @@ def main(args):
         save_weights_only=False,
         save_best_only=True,
         period=1)
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, mode='min', patience=10, verbose=1, cooldown=0)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, mode='min', patience=10, verbose=1, cooldown=0, min_lr=1e-1000)
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=50, verbose=1, mode='min')
     terminate_on_nan = TerminateOnNaN()
 
@@ -154,7 +154,7 @@ def main(args):
 
     # Transfer training some epochs with frozen layers first if needed, to get a stable loss.
     initial_epoch = args.init_epoch
-    epochs = 20
+    epochs = initial_epoch + args.transfer_epoch
     print("Transfer training stage")
     print('Train on {} samples, val on {} samples, with batch size {}, input_shape {}.'.format(num_train, num_val, args.batch_size, input_shape))
     #model.fit_generator(train_data_generator,
@@ -245,7 +245,7 @@ if __name__ == '__main__':
         help = "Batch size for train, default=%(default)s")
     parser.add_argument('--optimizer', type=str, required=False, default='adam', choices=['adam', 'rmsprop', 'sgd'],
         help = "optimizer for training (adam/rmsprop/sgd), default=%(default)s")
-    parser.add_argument('--learning_rate', type=float, required=False, default=1e-4,
+    parser.add_argument('--learning_rate', type=float, required=False, default=1e-3,
         help = "Initial learning rate, default=%(default)s")
     parser.add_argument('--decay_type', type=str, required=False, default=None, choices=[None, 'cosine', 'exponential', 'polynomial', 'piecewise_constant'],
         help = "Learning rate decay type, default=%(default)s")
@@ -255,7 +255,7 @@ if __name__ == '__main__':
         help = "Freeze level of the model in transfer training stage. 0:NA/1:backbone/2:only open prediction layer")
     parser.add_argument('--init_epoch', type=int,required=False, default=0,
         help = "Initial training epochs for fine tune training, default=%(default)s")
-    parser.add_argument('--total_epoch', type=int,required=False, default=25,
+    parser.add_argument('--total_epoch', type=int,required=False, default=250,
         help = "Total training epochs, default=%(default)s")
     parser.add_argument('--multiscale', default=False, action="store_true",
         help='Whether to use multiscale training')
