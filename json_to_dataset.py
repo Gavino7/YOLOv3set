@@ -66,7 +66,7 @@ def main(_argv):
 						if coord[i] < 0: coord[i] = 0
 						if coord[i] > 1: coord[i] = 1
 					annotation_entry = annotation_entry + \
-									  (" %f,%f,%f,%f,%d" % (
+									  (" %.0f,%.0f,%.0f,%.0f,%d" % (
 									  int(coord[0]*416), int(coord[1]*416),
 									  int(coord[2]*416), int(coord[3]*416),
 									  class_map[bb['class']]))
