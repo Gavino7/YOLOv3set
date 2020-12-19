@@ -58,10 +58,10 @@ def main(_argv):
 				annotation_entry = str(jpg_file_name)
 				for bb in d['bbox']:
 					coord = []
-					coord.append(bb['xmin'])
-					coord.append(bb['ymin'])
-					coord.append(bb['xmax'])
-					coord.append(bb['ymax'])
+					coord.append(int(bb['xmin']))
+					coord.append(int(bb['ymin']))
+					coord.append(int(bb['xmax']))
+					coord.append(int(bb['ymax']))
 					for i in range(len(coord)):
 						if coord[i] < 0: coord[i] = 0
 						if coord[i] > 1: coord[i] = 1
