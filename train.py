@@ -154,7 +154,7 @@ def main(args):
 
     # Transfer training some epochs with frozen layers first if needed, to get a stable loss.
     initial_epoch = args.init_epoch
-    epochs = 15
+    epochs = 12
     print("Transfer training stage")
     print('Train on {} samples, val on {} samples, with batch size {}, input_shape {}.'.format(num_train, num_val, args.batch_size, input_shape))
     #model.fit_generator(train_data_generator,
@@ -249,13 +249,13 @@ if __name__ == '__main__':
         help = "Initial learning rate, default=%(default)s")
     parser.add_argument('--decay_type', type=str, required=False, default='exponential', choices=[None, 'cosine', 'exponential', 'polynomial', 'piecewise_constant'],
         help = "Learning rate decay type, default=%(default)s")
-    parser.add_argument('--transfer_epoch', type=int, required=False, default=15,
+    parser.add_argument('--transfer_epoch', type=int, required=False, default=12,
         help = "Transfer training (from Imagenet) stage epochs, default=%(default)s")
     parser.add_argument('--freeze_level', type=int,required=False, default=None, choices=[None, 0, 1, 2],
         help = "Freeze level of the model in transfer training stage. 0:NA/1:backbone/2:only open prediction layer")
     parser.add_argument('--init_epoch', type=int,required=False, default=0,
         help = "Initial training epochs for fine tune training, default=%(default)s")
-    parser.add_argument('--total_epoch', type=int,required=False, default=15,
+    parser.add_argument('--total_epoch', type=int,required=False, default=12,
         help = "Total training epochs, default=%(default)s")
     parser.add_argument('--multiscale', default=False, action="store_true",
         help='Whether to use multiscale training')
