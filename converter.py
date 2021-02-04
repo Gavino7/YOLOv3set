@@ -25,7 +25,7 @@ for f in os.listdir('xmlannotation'):
             bbox = xml_box.find('xmin').text + ',' + xml_box.find('ymin').text + ',' + xml_box.find('xmax').text + ',' + xml_box.find('ymax').text + ',' + str(class_map[obj.find('name').text])
             bboxes.append(bbox)
 
-        row = os.path.join('test_images',f.split('.')[0]+'.jpg') + ' ' + ' '.join(bboxes) + '\n'
+        row = os.path.join('test_images',f.split('.')[0]+'.JPG') + ' ' + ' '.join(bboxes) + '\n'
         print(row)
         file_ann.write(row)
 
