@@ -57,20 +57,19 @@ def main(_argv):
 				im.save(jpg_file_name)
 				annotation_entry = str(jpg_file_name)
 				for bb in d['bbox']:
-					if b['class'] == 'pcbBoardC' or b['class'] == 'UPlt':
-					    coord = []
-					    coord.append(bb['xmin'])
-					    coord.append(bb['ymin'])
-					    coord.append(bb['xmax'])
-					    coord.append(bb['ymax'])
-					    for i in range(len(coord)):
-						    if coord[i] < 0: coord[i] = 0
-						    if coord[i] > 1: coord[i] = 1
-					    annotation_entry = annotation_entry + \
-									       (" %.0f,%.0f,%.0f,%.0f,%d" % (
-										       int(coord[0]*416), int(coord[1]*416),
-										       int(coord[2]*416), int(coord[3]*416),
-										       class_map[bb['class']]))
+					coord = []
+					coord.append(bb['xmin'])
+					coord.append(bb['ymin'])
+					coord.append(bb['xmax'])
+					coord.append(bb['ymax'])
+					for i in range(len(coord)):
+						if coord[i] < 0: coord[i] = 0
+						if coord[i] > 1: coord[i] = 1
+					annotation_entry = annotation_entry + \
+									  (" %.0f,%.0f,%.0f,%.0f,%d" % (
+									  int(coord[0]*416), int(coord[1]*416),
+									  int(coord[2]*416), int(coord[3]*416),
+									  class_map[bb['class']]))
 				annotations.add(annotation_entry)
 			f.close()
 
