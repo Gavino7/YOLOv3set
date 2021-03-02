@@ -17,7 +17,7 @@ flags.DEFINE_string('anno_test', './data/annotation.test', 'Test annotation file
 flags.DEFINE_string('class_map', './data/class_map', 'Class map')
 flags.DEFINE_integer('random_seed', 1, 'Random seed used for dataset splitting', lower_bound=1)
 flags.DEFINE_integer('validation_holdout', 20, '% of initial dataset to save for validation purpose')
-flags.DEFINE_integer('test_holdout', 0, '% of initial dataset to save for test purpose')
+flags.DEFINE_integer('test_holdout', 10, '% of initial dataset to save for test purpose')
 
 def main(_argv):
 	# Load class map as a "class to index" dictionary
@@ -57,19 +57,20 @@ def main(_argv):
 				im.save(jpg_file_name)
 				annotation_entry = str(jpg_file_name)
 				for bb in d['bbox']:
-					coord = []
-					coord.append(bb['xmin'])
-					coord.append(bb['ymin'])
-					coord.append(bb['xmax'])
-					coord.append(bb['ymax'])
-					for i in range(len(coord)):
-						if coord[i] < 0: coord[i] = 0
-						if coord[i] > 1: coord[i] = 1
-					annotation_entry = annotation_entry + \
-									  (" %.0f,%.0f,%.0f,%.0f,%d" % (
-									  int(coord[0]*416), int(coord[1]*416),
-									  int(coord[2]*416), int(coord[3]*416),
-									  class_map[bb['class']]))
+					if bb['class'] == 'pcbBoardC' or bb['class'] == 'UPlt':
+					    coord = []
+					    coord.append(bb['xmin'])
+					    coord.append(bb['ymin'])
+					    coord.append(bb['xmax'])
+					    coord.append(bb['ymax'])
+					    for i in range(len(coord)):
+						    if coord[i] < 0: coord[i] = 0
+						    if coord[i] > 1: coord[i] = 1
+					    annotation_entry = annotation_entry + \
+									      (" %f,%f,%f,%f,%d" % (
+									      int(coord[0]*416), int(coord[1]*416),
+									      int(coord[2]*416), int(coord[3]*416),
+									      class_map[bb['class']]))
 				annotations.add(annotation_entry)
 			f.close()
 
